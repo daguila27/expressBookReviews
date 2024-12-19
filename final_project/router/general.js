@@ -18,32 +18,66 @@ public_users.post("/register", (req,res) => {
   return res.status(300).json({message: "User register successfully!"});
 });
 
+const axios = require('axios');
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json(JSON.stringify(books));
+public_users.get('/', function (req, res) {
+    //Write your code here
+    axios.get('https://api-url.com/books')
+    .then(response => {
+        // Returning the books data
+        return res.status(200).json(JSON.stringify(response.data)); 
+    })
+    .catch(error => {
+      return res.status(500).json({ error: 'Failed to fetch books' });
+    });
+    //return res.status(300).json(JSON.stringify(books));
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json(JSON.stringify(books[req.params.isbn]));
+  const isbn = req.params.isbn;
+  axios.get('https://api-url.com/books/'+isbn)
+    .then(response => {
+        // Returning the books data
+        return res.status(200).json(JSON.stringify(response.data)); 
+    })
+    .catch(error => {
+      return res.status(500).json({ error: 'Failed to fetch book' });
+    });
+  //return res.status(300).json(JSON.stringify(books[req.params.isbn]));
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author = req.params.author;
-  const findBook = Object.values(books).filter((book) => book.author === author);
-  return res.status(300).json(JSON.stringify(findBook));
+  axios.get('https://api-url.com/books/author/'+author)
+    .then(response => {
+        // Returning the books data
+        return res.status(200).json(JSON.stringify(response.data)); 
+    })
+    .catch(error => {
+      return res.status(500).json({ error: 'Failed to fetch book' });
+    });
+  //const findBook = Object.values(books).filter((book) => book.author === author);
+  //return res.status(300).json(JSON.stringify(findBook));
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  const findBook = Object.values(books).find((book) => book.title === title);
-  return res.status(300).json(JSON.stringify(findBook));
+  axios.get('https://api-url.com/books/title/'+title)
+    .then(response => {
+        // Returning the books data
+        return res.status(200).json(JSON.stringify(response.data)); 
+    })
+    .catch(error => {
+      return res.status(500).json({ error: 'Failed to fetch book' });
+    });
+  //const findBook = Object.values(books).find((book) => book.title === title);
+  //return res.status(300).json(JSON.stringify(findBook));
 });
 
 //  Get book review
