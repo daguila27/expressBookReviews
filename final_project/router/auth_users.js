@@ -43,7 +43,33 @@ regd_users.post("/login", (req, res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     //Write your code here
-    return res.status(300).json({ message: "Yet to be implemented" });
+    const isbn = req.params.isbn;
+    const username = req.body.username;
+    const review = req.body.review;
+
+    const findBook = books[isbn];
+    if(!findBook) {
+        return res.status(400).json({ message: "Book not found!" });
+    }
+    // if review for username doesn't exists will be created
+    findBook.reviews[username] = review; 
+    books[isbn] = findBook;
+    return res.status(300).json(`Updated book: ${JSON.stringify(books[isbn])}`);
+});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    const isbn = req.params.isbn;
+    const username = req.body.username;
+
+    const findBook = books[isbn];
+    if(!findBook) {
+        return res.status(400).json({ message: "Book not found!" });
+    }
+    delete findBook.reviews[username]; 
+    books[isbn] = findBook;
+    return res.status(300).json(`Updated book: ${JSON.stringify(books[isbn])}`);
 });
 
 module.exports.authenticated = regd_users;
